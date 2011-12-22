@@ -21,11 +21,11 @@ namespace Simulation {
             return *this;
          }
 
-         bool operator==( const Schedulable& left, const Schedulable& right ) const {
-            return left.time == right.time ;
+         bool operator==( const Schedulable& right ) const {
+            return time == right.time ;
          }
-         bool operator<( const Schedulable& left, const Schedulable& right ) const {
-            return left.time < right.time ;
+         bool operator<( const Schedulable& right ) const {
+            return time < right.time ;
          }
 
          virtual void Print( std::ostream& out ) const {
@@ -50,7 +50,7 @@ namespace Simulation {
    class Queue {
 
       private:
-         std::priority_queueu<Schedulable> queue;
+         std::priority_queue<Schedulable> queue;
 
       public:
 

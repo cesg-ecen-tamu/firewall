@@ -1,5 +1,5 @@
 TARGET=sim
-OBJS=sim.o
+OBJS=sim.o Simulation.o
 LIBS=
 INCLUDES=
 COMPILER=g++
