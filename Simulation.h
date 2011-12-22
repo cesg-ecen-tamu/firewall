@@ -95,6 +95,16 @@ namespace Simulation {
    };
    std::ostream& operator<<( std::ostream& out, const Sink& s ) ;
 
+   class Simulation {
+
+      private:
+
+      public:
+         Simulation( ) {}
+         void Run() {}
+
+   };
+
 }
 
 #endif
