@@ -2,11 +2,6 @@
 
 namespace Simulation {
 
-std::ostream& operator<<( std::ostream& out, const Schedulable& s ) {
-   s.Print( out );
-   return out;
-}
-
 std::ostream& operator<<( std::ostream& out, const Event& e ) {
    e.Print( out );
    return out;

@@ -2,7 +2,8 @@
 #define SIMULATION_H
 
 #include <iostream>
-#include <queue>
+#include <vector>
+#include <algorithm>
 
 namespace Simulation {
 
@@ -24,26 +25,98 @@ namespace Simulation {
          bool operator==( const Schedulable& right ) const {
             return time == right.time ;
          }
+         bool operator!=( const Schedulable& right ) const {
+            return !( *this == right ) ; 
+         }
          bool operator<( const Schedulable& right ) const {
             return time < right.time ;
          }
 
          virtual void Print( std::ostream& out ) const {
-            out << time;
+            out << time ;
+         }
+
+         friend std::ostream& operator<<( std::ostream& out, const Schedulable s ) {
+            s.Print( out );
+            return out;
          }
 
    };
-   std::ostream& operator<<( std::ostream& out, const Schedulable& s ) ;
-   
-   class Queue {
-
-      private:
-         std::priority_queue<Schedulable> queue;
+  
+   template <typename Element=Schedulable, typename Container=std::vector<Element> >
+   class Schedule {
 
       public:
+         typedef Element element_type;
+         typedef Container container_type;
+
+      private:
+         container_type schedule;
+
+      public:
+         Schedule() { 
+            std::make_heap( schedule.begin(), schedule.end() ) ;
+         }
+         Schedule( const Schedule& s ) : schedule( s.schedule.begin(), s.schedule.end() ) {}
+         Schedule& operator=( const Schedule& s ) {
+            schedule.clear();
+            std::make_heap( schedule.begin(), schedule.end() ) ;
+            typename Container::const_iterator itr ;
+            for( itr = s.schedule.begin(); itr != s.schedule.end(); ++itr ) {
+               schedule.push_back( *itr.clone() );
+            }
+            return *this;
+         }
+
+         bool operator==( const Schedule& s ) const {
+            if ( s.schedule.size() != schedule.size() ) {
+               return false;
+            }
+            typename Container::const_iterator itr, s_itr ;
+            s_itr = s.schedule.begin();
+            for( itr = schedule.begin(); itr != schedule.end(); ++itr,++s_itr ) {
+               if ( *s_itr != *itr ) {
+                  return false;
+               }
+            }
+            return true;
+         }
+         bool operator!=( const Schedule& right ) const {
+            return !( *this == right ) ;
+         }
+
+         void Print( std::ostream& out ) const {
+            container_type copy( schedule.begin(), schedule.end() ) ;
+            std::sort_heap( copy.begin(), copy.end() ) ;
+            typename Container::const_iterator itr;
+            bool first = true;
+            for( itr = copy.begin(); itr != copy.end(); ++itr ) {
+               if ( !first ) 
+                  out << ":" ;
+               out << *itr ;
+               first = false;
+            }
+         }
+         
+         template <typename E, typename C>
+         friend std::ostream& operator<<( std::ostream& out, const Schedule<E,C>& s ) {
+            s.Print( out ) ;
+            return out ;
+         }
+
+         void Insert( element_type& et ) {
+            schedule.push_back( et );
+            std::push_heap( schedule.begin(), schedule.end() );
+         }
+
+         element_type Next() {
+            element_type et = schedule.front() ;
+            std::pop_heap( schedule.begin(), schedule.end() );
+            return et ;
+         }
 
    };
-
+  
    class Event : public Schedulable {
 
       private:
