@@ -1,4 +1,16 @@
-This is the repository for the firewall data-plane architectures and simulations.
+Overview
+--------
+This is the repository for the firewall data-plane architectures and simulations. 
+Currently, there is only base code for generic simulation.
 
--jasson
--arka
+Build Notes
+-----------
+1. You will need the g++-4.6 compiler to work with this project.
+2. Once you have this compiler installed and running correctly either create a 
+   symbolic link or an alias for the binary name of this compiler to g++46 so
+   that the unmodified Makefile will work with your environment. The following
+   is a quick example of the two options ...
+
+   a) In your .bash_profile add ... alias g++46="/..path../your_binary_name"
+   b) sudo ln -s /..path../your_binary_name /usr/bin/g++46 
+

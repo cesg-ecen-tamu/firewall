@@ -2,8 +2,8 @@ TARGET=sim
 OBJS=sim.o Simulation.o
 LIBS=
 INCLUDES=
-COMPILER=g++
-CFLAGS=-Wall
+COMPILER=g++46
+CFLAGS=-Wall -std=c++0x
 
 $(TARGET):$(OBJS)
 	$(COMPILER) -o $@ $^ $(LIBS)
