@@ -12,5 +12,11 @@ $(TARGET):$(OBJS)
 	$(COMPILER) $(CFLAGS) -c $^ $(INCLUDES)
 
 clean:
-	rm *.o
-	rm $(TARGET)
+	rm -f *.o
+	rm -f $(TARGET)
+	rm -rf latex
+	rm -rf html
+
+docs:
+	doxygen *.h
+	doxygen *.cc

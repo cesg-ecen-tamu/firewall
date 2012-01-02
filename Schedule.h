@@ -1,3 +1,22 @@
+/**
+ * @file             Schedule.h
+ * @author           Jasson Casey 
+ * @version          0.1
+ * @section LICENSE
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details at
+ * http://www.gnu.org/copyleft/gpl.html
+ *
+ */
+
 #ifndef SCHEDULE_H
 #define SCHEDULE_H
 
@@ -7,6 +26,13 @@
 #include <cstdint>
 
 namespace Simulation {
+
+   /**
+    * @section DESCRIPTION
+    *
+    * Schedulable is the base class for any object that needs to be scheduled. It provides
+    * simple comparison and output operations. 
+    */
 
    class Schedulable {
 
@@ -45,6 +71,13 @@ namespace Simulation {
 
    };
 
+   /** 
+    * @section DESCRIPTION
+    *
+    * GreaterSchdule is a simple Functor to provide greater than comparison of 
+    * Schedulable objects or their derived classes for proper schedule management.
+    */
+
    class GreaterSchedule {
       public:
          bool operator()( const Schedulable& left, const Schedulable& right ) {
@@ -55,7 +88,22 @@ namespace Simulation {
          }
    };
 
+   /**
+    * @section DESCRIPTION
+    *
+    * EmptySchedule is a simple class for empty exceptions in the schedule.
+    *
+    */
    class EmptySchedule {} ;
+
+   /**
+    * @section DESCRIPTION
+    *
+    * Schedule is a min heap that is build for classes which are derived
+    * from Schedulable. Users may insert objects into this object for scheudling
+    * and invoke Next to retrieve the next item to be handled.
+    *
+    */
   
    template <typename Element=Schedulable, typename Container=std::vector<Element*> >
    class Schedule {

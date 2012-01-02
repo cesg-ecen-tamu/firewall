@@ -1,0 +1,9 @@
+# This is a .gitingore file. Anything listed here will be ignored
+# by git.
+sim
+*.o
+*.swp
+.DS_Store
+latex
+html
+*.swp
