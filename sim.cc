@@ -12,11 +12,11 @@ int main() {
    Simulation::Schedulable s3(1) ;
    Simulation::Schedulable s4(2) ;
    Simulation::Schedulable s5(5) ;
-   schedule.Insert( s1 );
-   schedule.Insert( s2 );
-   schedule.Insert( s3 );
-   schedule.Insert( s4 );
-   schedule.Insert( s5 );
+   schedule.Insert( &s1 );
+   schedule.Insert( &s2 );
+   schedule.Insert( &s3 );
+   schedule.Insert( &s4 );
+   schedule.Insert( &s5 );
    std::cout << schedule << std::endl;
    Simulation::Schedule<> s(schedule);
    std::cout << s << std::endl;
@@ -25,8 +25,8 @@ int main() {
    }
 
    while ( ! schedule.Empty() ) {
-      Simulation::Schedulable ss = schedule.Next();
-      std::cout<< ss << std::endl;
+      Simulation::Schedulable* ss = schedule.Next();
+      std::cout<< *ss << std::endl;
       std::cout << schedule << std::endl;
    }
    schedule.Next();

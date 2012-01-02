@@ -50,11 +50,14 @@ namespace Simulation {
          bool operator()( const Schedulable& left, const Schedulable& right ) {
             return !( left < right || left == right );
          }
+         bool operator()( const Schedulable* left, const Schedulable* right ) {
+            return !( *left < *right || *left == *right );
+         }
    };
 
    class EmptySchedule {} ;
   
-   template <typename Element=Schedulable, typename Container=std::vector<Element> >
+   template <typename Element=Schedulable, typename Container=std::vector<Element*> >
    class Schedule {
 
       public:
@@ -86,7 +89,7 @@ namespace Simulation {
             typename Container::const_iterator itr, s_itr ;
             s_itr = s.schedule.begin();
             for( itr = schedule.begin(); itr != schedule.end(); ++itr,++s_itr ) {
-               if ( *s_itr != *itr ) {
+               if ( **s_itr != **itr ) {
                   return false;
                }
             }
@@ -104,7 +107,7 @@ namespace Simulation {
             for( itr = copy.begin(); itr != copy.end(); ++itr ) {
                if ( !first ) 
                   out << ":" ;
-               out << *itr ;
+               out << **itr ;
                first = false;
             }
          }
@@ -115,15 +118,15 @@ namespace Simulation {
             return out ;
          }
 
-         void Insert( element_type& et ) {
+         void Insert( element_type* et ) {
             schedule.push_back( et );
             std::push_heap( schedule.begin(), schedule.end(), GreaterSchedule() );
          }
 
-         element_type Next() {
+         element_type* Next() {
             if ( schedule.empty() )
                throw EmptySchedule();
-            element_type et = schedule.front() ;
+            element_type* et = schedule.front() ;
             std::pop_heap( schedule.begin(), schedule.end(), GreaterSchedule() ) ;
             schedule.erase( schedule.end() - 1 ) ;
             return et ;
