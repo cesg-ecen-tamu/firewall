@@ -23,4 +23,11 @@ int main() {
    if ( schedule != s ) {
       std::cout << "fail" << std::endl;
    }
+
+   while ( ! schedule.Empty() ) {
+      Simulation::Schedulable ss = schedule.Next();
+      std::cout<< ss << std::endl;
+      std::cout << schedule << std::endl;
+   }
+   schedule.Next();
 }

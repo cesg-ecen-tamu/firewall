@@ -12,6 +12,7 @@ namespace Simulation {
 
       private:
 
+         // Time notion relative to desired clocking system
          uint64_t time;
 
       public:
@@ -43,6 +44,15 @@ namespace Simulation {
          }
 
    };
+
+   class GreaterSchedule {
+      public:
+         bool operator()( const Schedulable& left, const Schedulable& right ) {
+            return !( left < right || left == right );
+         }
+   };
+
+   class EmptySchedule {} ;
   
    template <typename Element=Schedulable, typename Container=std::vector<Element> >
    class Schedule {
@@ -55,13 +65,13 @@ namespace Simulation {
          container_type schedule;
 
       public:
-         Schedule() { 
-            std::make_heap( schedule.begin(), schedule.end() ) ;
+         Schedule() {
+            std::make_heap( schedule.begin(), schedule.end(), GreaterSchedule() ) ;
          }
          Schedule( const Schedule& s ) : schedule( s.schedule.begin(), s.schedule.end() ) {}
          Schedule& operator=( const Schedule& s ) {
             schedule.clear();
-            std::make_heap( schedule.begin(), schedule.end() ) ;
+            std::make_heap( schedule.begin(), schedule.end(), GreaterSchedule() ) ;
             typename Container::const_iterator itr ;
             for( itr = s.schedule.begin(); itr != s.schedule.end(); ++itr ) {
                schedule.push_back( *itr.clone() );
@@ -70,8 +80,8 @@ namespace Simulation {
          }
 
          bool operator==( const Schedule& s ) const {
-            if ( s.schedule.size() != schedule.size() ) {
-               return false;
+            if (  schedule.size() != s.schedule.size() ) {
+               return false ;
             }
             typename Container::const_iterator itr, s_itr ;
             s_itr = s.schedule.begin();
@@ -107,13 +117,24 @@ namespace Simulation {
 
          void Insert( element_type& et ) {
             schedule.push_back( et );
-            std::push_heap( schedule.begin(), schedule.end() );
+            std::push_heap( schedule.begin(), schedule.end(), GreaterSchedule() );
          }
 
          element_type Next() {
+            if ( schedule.empty() )
+               throw EmptySchedule();
             element_type et = schedule.front() ;
-            std::pop_heap( schedule.begin(), schedule.end() );
+            std::pop_heap( schedule.begin(), schedule.end(), GreaterSchedule() ) ;
+            schedule.erase( schedule.end() - 1 ) ;
             return et ;
+         }
+
+         inline bool Empty() const {
+            return schedule.empty() ;
+         }
+
+         inline int Size() const {
+            return schedule.size() ;
          }
 
    };

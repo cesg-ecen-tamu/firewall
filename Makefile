@@ -12,5 +12,5 @@ $(TARGET):$(OBJS)
 	$(COMPILER) $(CFLAGS) -c $^ $(INCLUDES)
 
 clean:
+	rm *.o
 	rm $(TARGET)
-	rm $(OBJS)
