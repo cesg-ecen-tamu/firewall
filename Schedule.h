@@ -30,8 +30,8 @@ namespace Simulation {
    /**
     * @section DESCRIPTION
     *
-    * Schedulable is the base class for any object that needs to be scheduled. It provides
-    * simple comparison and output operations. 
+    * Schedulable is the base class for any object that needs to be scheduled. 
+    * It provides simple comparison and output operations. 
     */
 
    class Schedulable {
@@ -64,7 +64,8 @@ namespace Simulation {
             out << time ;
          }
 
-         friend std::ostream& operator<<( std::ostream& out, const Schedulable s ) {
+         friend std::ostream& operator<<( std::ostream& out, 
+                                          const Schedulable s ) {
             s.Print( out );
             return out;
          }
@@ -75,7 +76,8 @@ namespace Simulation {
     * @section DESCRIPTION
     *
     * GreaterSchdule is a simple Functor to provide greater than comparison of 
-    * Schedulable objects or their derived classes for proper schedule management.
+    * Schedulable objects or their derived classes for proper schedule 
+    * management.
     */
 
    class GreaterSchedule {
@@ -105,7 +107,8 @@ namespace Simulation {
     *
     */
   
-   template <typename Element=Schedulable, typename Container=std::vector<Element*> >
+   template <typename Element=Schedulable, 
+               typename Container=std::vector<Element*> >
    class Schedule {
 
       public:
@@ -117,12 +120,15 @@ namespace Simulation {
 
       public:
          Schedule() {
-            std::make_heap( schedule.begin(), schedule.end(), GreaterSchedule() ) ;
+            std::make_heap( schedule.begin(), schedule.end(), 
+                              GreaterSchedule() ) ;
          }
-         Schedule( const Schedule& s ) : schedule( s.schedule.begin(), s.schedule.end() ) {}
+         Schedule( const Schedule& s ) : schedule( s.schedule.begin(), 
+                                          s.schedule.end() ) {}
          Schedule& operator=( const Schedule& s ) {
             schedule.clear();
-            std::make_heap( schedule.begin(), schedule.end(), GreaterSchedule() ) ;
+            std::make_heap( schedule.begin(), schedule.end(), 
+                              GreaterSchedule() ) ;
             typename Container::const_iterator itr ;
             for( itr = s.schedule.begin(); itr != s.schedule.end(); ++itr ) {
                schedule.push_back( *itr.clone() );
@@ -161,21 +167,24 @@ namespace Simulation {
          }
          
          template <typename E, typename C>
-         friend std::ostream& operator<<( std::ostream& out, const Schedule<E,C>& s ) {
+         friend std::ostream& operator<<( std::ostream& out, 
+                                          const Schedule<E,C>& s ) {
             s.Print( out ) ;
             return out ;
          }
 
          void Insert( element_type* et ) {
             schedule.push_back( et );
-            std::push_heap( schedule.begin(), schedule.end(), GreaterSchedule() );
+            std::push_heap( schedule.begin(), schedule.end(), 
+                              GreaterSchedule() );
          }
 
          element_type* Next() {
             if ( schedule.empty() )
                throw EmptySchedule();
             element_type* et = schedule.front() ;
-            std::pop_heap( schedule.begin(), schedule.end(), GreaterSchedule() ) ;
+            std::pop_heap( schedule.begin(), schedule.end(), 
+                           GreaterSchedule() ) ;
             schedule.erase( schedule.end() - 1 ) ;
             return et ;
          }

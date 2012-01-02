@@ -1,12 +1,12 @@
 Overview
 --------
-This is the repository for the firewall data-plane architectures and simulations. 
-Currently, there is only base code for generic simulation.
+This is the repository for the firewall data-plane architectures and 
+simulations. Currently, there is only base code for generic simulation.
 
 LICENSE
 -------
-I have started the project with the GPL license as a default, we can change it later as
-necessary. -jc
+I have started the project with the GPL license as a default, we can change it 
+later as necessary. -jc
 
 Build Notes
 -----------
@@ -18,14 +18,17 @@ Build Notes
 
    a) In your .bash_profile add ... alias g++46="/..path../your_binary_name"
    b) sudo ln -s /..path../your_binary_name /usr/bin/g++46 
-3. Once you have your environment established simply type make to build the project.
-4. You may build documentation by typing make docs; however, this requires you have
-   doxygen installed on your system.
+3. Once you have your environment established simply type make to build the 
+   project.
+4. You may build documentation by typing make docs; however, this requires you 
+   have doxygen installed on your system.
+5. I've included a version of my .vimrc file that you may incorporate if you use
+   vim.
 
 Style Guidelines
 ----------------
 1. This will be a minimal list, if in doubt please try and follow the existing 
    style of the code.
 2. Do not use more than 80 columns in your code.
-3. Open brackets, {, should not be on their own line.
+3. Open braces, {, should not be on their own line.
 4. Your tab stops should be set to 3 spaces.
