@@ -1,5 +1,5 @@
 TARGET=sim
-OBJS=sim.o Simulation.o Schedule.o
+OBJS=sim.o Simulation.o Schedule.o Schedulable.o
 LIBS=
 INCLUDES=
 COMPILER=g++46

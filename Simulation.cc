@@ -19,7 +19,7 @@
 
 #include "Simulation.h"
 
-namespace Simulation {
+namespace Simulator {
 
 std::ostream& operator<<( std::ostream& out, const Event& e ) {
    e.Print( out );

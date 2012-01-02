@@ -22,7 +22,7 @@
 
 #include "Schedule.h"
 
-namespace Simulation {
+namespace Simulator {
 
    class Event : public Schedulable {
 

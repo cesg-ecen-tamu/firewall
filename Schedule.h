@@ -20,83 +20,11 @@
 #ifndef SCHEDULE_H
 #define SCHEDULE_H
 
-#include <iostream>
 #include <vector>
 #include <algorithm>
-#include <cstdint>
+#include "Schedulable.h"
 
-namespace Simulation {
-
-   /**
-    * @section DESCRIPTION
-    *
-    * Schedulable is the base class for any object that needs to be scheduled. 
-    * It provides simple comparison and output operations. 
-    */
-
-   class Schedulable {
-
-      private:
-
-         // Time notion relative to desired clocking system
-         uint64_t time;
-
-      public:
-
-         Schedulable( uint64_t t) : time(t) {}
-         Schedulable( const Schedulable& s ) : time(s.time) {}
-         Schedulable& operator=( const Schedulable& s ) {
-            time = s.time;
-            return *this;
-         }
-
-         bool operator==( const Schedulable& right ) const {
-            return time == right.time ;
-         }
-         bool operator!=( const Schedulable& right ) const {
-            return !( *this == right ) ; 
-         }
-         bool operator<( const Schedulable& right ) const {
-            return time < right.time ;
-         }
-
-         virtual void Print( std::ostream& out ) const {
-            out << time ;
-         }
-
-         friend std::ostream& operator<<( std::ostream& out, 
-                                          const Schedulable s ) {
-            s.Print( out );
-            return out;
-         }
-
-   };
-
-   /** 
-    * @section DESCRIPTION
-    *
-    * GreaterSchdule is a simple Functor to provide greater than comparison of 
-    * Schedulable objects or their derived classes for proper schedule 
-    * management.
-    */
-
-   class GreaterSchedule {
-      public:
-         bool operator()( const Schedulable& left, const Schedulable& right ) {
-            return !( left < right || left == right );
-         }
-         bool operator()( const Schedulable* left, const Schedulable* right ) {
-            return !( *left < *right || *left == *right );
-         }
-   };
-
-   /**
-    * @section DESCRIPTION
-    *
-    * EmptySchedule is a simple class for empty exceptions in the schedule.
-    *
-    */
-   class EmptySchedule {} ;
+namespace Simulator {
 
    /**
     * @section DESCRIPTION
@@ -142,7 +70,8 @@ namespace Simulation {
             }
             typename Container::const_iterator itr, s_itr ;
             s_itr = s.schedule.begin();
-            for( itr = schedule.begin(); itr != schedule.end(); ++itr,++s_itr ) {
+            for(  itr = schedule.begin(); 
+                  itr != schedule.end(); ++itr,++s_itr ) {
                if ( **s_itr != **itr ) {
                   return false;
                }

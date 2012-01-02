@@ -1,5 +1,5 @@
 /**
- * @file             Schedule.cc
+ * @file             Schedulable.cc
  * @author           Jasson Casey 
  * @version          0.1
  * @section LICENSE
@@ -17,7 +17,7 @@
  *
  */
 
-#include "Schedule.h"
+#include "Schedulable.h"
 
 namespace Simulator {
 
