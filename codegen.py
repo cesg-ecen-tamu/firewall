@@ -29,7 +29,8 @@ import sys, os, datetime, string
 gpl  = [ 'This program is free software; you can redistribute it and/or\n' ]
 gpl += [ 'modify it under the terms of the GNU General Public License as\n' ]
 gpl += [ 'published by the Free Software Foundation; either version 2 of\n' ]
-gpl += [ 'the License, or (at your option) any later version.\n\n' ]
+gpl += [ 'the License, or (at your option) any later version.\n' ]
+gpl += [ '\n' ]
 gpl += [ 'This program is distributed in the hope that it will be useful,\n' ]
 gpl += [ 'but WITHOUT ANY WARRANTY; without even the implied warranty of\n' ]
 gpl += [ 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU\n' ]
@@ -43,9 +44,13 @@ mit += [ 'restriction, including without limitation the rights to use,\n' ]
 mit += [ 'copy, modify, merge, publish, distribute, sublicense, and/or sell\n']
 mit += [ 'copies of the Software, and to permit persons to whom the\n' ]
 mit += [ 'Software is furnished to do so, subject to the following\n' ]
-mit += [ 'conditions:\n\nThe above copyright notice and this permission\n' ]
+mit += [ 'conditions:\n' ]
+mit += [ '\n' ]
+mit += [ 'The above copyright notice and this permission\n' ]
 mit += [ 'notice shall be included in all copies or substantial portions of\n' ]
-mit += [ 'the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT\n' ]
+mit += [ 'the Software.\n' ]
+mit += [ '\n' ]
+mit += [ 'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT\n' ]
 mit += [ 'WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT\n' ]
 mit += [ 'LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A\n' ]
 mit += [ 'PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n' ]
@@ -88,7 +93,7 @@ def make_python_shell( config ):
    file += "@version\t" + version + '\n\n'
    file += "@section LICENSE\n\n"
    file += string.join( licenses[ config[1] ], '' ) 
-   file += "\"\"\"\n"
+   file += "\"\"\"\n\n"
    return file
 
 def make_c_shell( config, trailer ):
@@ -191,7 +196,7 @@ def gen_cpp_files( config ):
 
 def gen_python_files( config ):
    py_file = make_python_shell( config )
-   return [ py_file, config[0] + '.py' ]
+   return [ ( config[0] + '.py', py_file ) ]
 
 def write_files( results ):
 
