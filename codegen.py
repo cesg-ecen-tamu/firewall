@@ -108,6 +108,7 @@ def make_c_shell( config, trailer ):
    file += " *\n"
    file += " * " + string.join( licenses[ config[1] ], ' * ' )
    file += " *\n */\n\n"
+   file += " #include \"" + config[0] + '.h\"\n'
    return file
 
 def make_h_includes( config ):
