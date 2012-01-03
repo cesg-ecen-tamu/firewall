@@ -2,6 +2,7 @@
  * @file             Schedulable.h
  * @author           Jasson Casey 
  * @version          0.1
+ *
  * @section LICENSE
  *
  * This program is free software; you can redistribute it and/or
@@ -34,13 +35,20 @@ namespace Simulator {
 
    class Schedulable {
 
-      private:
+      public:
+         typedef Schedulable* pointer;
+         typedef Schedulable& reference;
 
-         // Time notion relative to desired clocking system
+      private:
+         /** 
+          * Time notion relative to desired clocking system
+          *
+          * @param time is a large unsigned integer that represents
+          * any relative number of timing steps.
+          */
          uint64_t time;
 
       public:
-
          Schedulable( uint64_t t) : time(t) {}
          Schedulable( const Schedulable& s ) : time(s.time) {}
          Schedulable& operator=( const Schedulable& s ) {
@@ -61,13 +69,11 @@ namespace Simulator {
          virtual void Print( std::ostream& out ) const {
             out << time ;
          }
-
          friend std::ostream& operator<<( std::ostream& out, 
                                           const Schedulable s ) {
             s.Print( out );
             return out;
          }
-
    };
 
    /** 
@@ -80,9 +86,13 @@ namespace Simulator {
 
    class GreaterSchedule {
       public:
+         /** Greater-than functor comparison for references.
+          */
          bool operator()( const Schedulable& left, const Schedulable& right ) {
             return !( left < right || left == right );
          }
+         /** Greater-than functor comparison for pointers.
+          */
          bool operator()( const Schedulable* left, const Schedulable* right ) {
             return !( *left < *right || *left == *right );
          }

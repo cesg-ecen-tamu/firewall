@@ -20,6 +20,7 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
+#include <limits>
 #include "Schedule.h"
 
 namespace Simulator {
@@ -75,13 +76,67 @@ namespace Simulator {
    };
    std::ostream& operator<<( std::ostream& out, const Sink& s ) ;
 
+   /** @section DESCRIPTION
+    *
+    * Simulation is the core of the simulator. It will start processing
+    * events at time, and then process them in batches against proper
+    * time increments. The simulation will run until the schedule is 
+    * empty.
+    *
+    * Items that are scheduled to be processed in the same time window
+    * will be executed nondeterministically.
+    */
+   template <typename ST, typename TT=uint64_t>
    class Simulation {
 
+      public:
+         typedef ST ScheduleType;
+         typedef TT TimeType;
+
       private:
+         TimeType time;
+         TimeType time_init;
+         TimeType time_inc;
+         TimeType time_limit;
+
+         ScheduleType schedule ;
 
       public:
-         Simulation( ) {}
-         void Run() {}
+
+         Simulation( TimeType init = 0, TimeType inc = 1, TimeType limit = 0 ) :
+                     time(init), time_init(init), time_inc(inc), 
+                     time_limit(limit) {}
+
+         void Run() {
+
+            // Initialization ...
+
+            /** If no time limit then run for the maximum amount of time */
+            if ( time_limit == 0 )
+               time_limit = std::numeric_limits<TimeType>::max() ;
+
+            /** While the schedule has items and the simulation
+             *  is not out of time ... */
+            typename ScheduleType::ItemType::pointer item = schedule.Next() ;
+            while ( item != nullptr && time < time_limit ) {
+
+               /** If the item is in the current time window
+                *  process it and get the next item */
+               if ( item->time <= time ) {
+                  item->process( schedule, time ) ;
+                  item = schedule.Next() ;
+               }
+
+               /** Otherwise increment the time and lets see
+                * if we can process the current item in the next
+                * time window */
+               else {
+                  time += time_inc ;
+               }
+            }
+
+            // Cleanup ...
+         }
 
    };
 

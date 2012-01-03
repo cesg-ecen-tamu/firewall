@@ -29,18 +29,18 @@ namespace Simulator {
    /**
     * @section DESCRIPTION
     *
-    * Schedule is a min heap that is build for classes which are derived
+    * Schedule is a min heap that is built for classes which are derived
     * from Schedulable. Users may insert objects into this object for scheudling
-    * and invoke Next to retrieve the next item to be handled.
-    *
+    * and invoke Next to retrieve the next item to be handled. This container
+    * does not take ownership of any of its schedulable objects.
     */
   
-   template <typename Element=Schedulable, 
-               typename Container=std::vector<Element*> >
+   template <typename IT=Schedulable, 
+               typename Container=std::vector<IT*> >
    class Schedule {
 
       public:
-         typedef Element element_type;
+         typedef IT ItemType;
          typedef Container container_type;
 
       private:
@@ -102,16 +102,17 @@ namespace Simulator {
             return out ;
          }
 
-         void Insert( element_type* et ) {
+         void Insert( ItemType* et ) {
             schedule.push_back( et );
             std::push_heap( schedule.begin(), schedule.end(), 
                               GreaterSchedule() );
          }
 
-         element_type* Next() {
+         ItemType* Next() {
             if ( schedule.empty() )
-               throw EmptySchedule();
-            element_type* et = schedule.front() ;
+               return nullptr ;
+               //throw EmptySchedule();
+            ItemType* et = schedule.front() ;
             std::pop_heap( schedule.begin(), schedule.end(), 
                            GreaterSchedule() ) ;
             schedule.erase( schedule.end() - 1 ) ;
