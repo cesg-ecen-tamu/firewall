@@ -113,7 +113,13 @@ class InterArrivalDistrib {
       }
 };
 
-class DataSink {
+<template typename RNG=std::mt19937>
+class DataSrc {
+   private:
+      SizeDistrib<RNG>           size_dist;
+      InterArrivalDistrib<RNG>   ia_dist;
+   public:
+      explicit DataSrc() : size_dist(), ia_dist() {}
 };
 
 #endif
