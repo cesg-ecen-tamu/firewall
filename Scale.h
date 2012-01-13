@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2012 Jasson Casey
  *
- * @file	DataTester.cc
+ * @file	Scale.h
  * @author	Jasson Casey
  * @version	0.1
  *
@@ -31,20 +31,13 @@
  *
  */
 
-#include "DataTester.h"
-#include <iostream>
+#ifndef SCALE_H
+#define SCALE_H
 
-typedef SizeDistrib<std::mt19937> sd_type;
+struct Unit { static constexpr double value = 1; };
+struct Milli { static constexpr double value = Unit::value * 1000; };
+struct Micro { static constexpr double value = Milli::value * 1000; };
+struct Nano { static constexpr double value = Micro::value * 1000; };
+struct Pico { static constexpr double value = Nano::value * 1000; };
 
-int main() {
-   SizeDistrib<std::mt19937> ds1(DistribType::Constant, 1500);
-   SizeDistrib<std::mt19937> ds2(DistribType::Normal, 1000);
-   InterArrivalDistrib<std::mt19937> ds3(DistribType::Constant, 50);
-
-   for(int i=0;i<10;++i) {
-      std::cout << "c: " << ds1() << std::endl;
-      std::cout << "n: " << ds2() << std::endl;
-      std::cout << "r: " << ds3() << std::endl;
-
-   }
-}
+#endif
