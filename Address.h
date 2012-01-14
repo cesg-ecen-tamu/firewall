@@ -50,7 +50,7 @@ class AddressBase {
       value_type value;
 
    public:
-      AddressBase() : value(0) {}
+      AddressBase( void* bfr = nullptr ) : value(0) {}
       explicit AddressBase( const char* a ) {
          parse_string_to_bytes<value_size>( 
                reinterpret_cast<uint8_t(&)[value_size]>(value), 
@@ -96,6 +96,22 @@ class AddressBase {
       }
       virtual AddressBase operator~() const {
          return AddressBase<value_type>( ~value );
+      }
+      virtual AddressBase& operator<<=( int amount ) {
+         value <<= amount;
+         return *this;
+      }
+      virtual AddressBase& operator>>=( int amount ) {
+         value >>= amount;
+         return *this;
+      }
+      virtual AddressBase operator<<( int amount ) {
+         AddressBase<value> tmp( *this );
+         tmp <<= amount;
+         return tmp;
+      }
+      virtual AddressBase operator>>( int amount ) {
+         return AddressBase<value_type>( value >> amount );
       }
       virtual void reverse() {
          uint8_t* ptr = reinterpret_cast<uint8_t*>(&value);
