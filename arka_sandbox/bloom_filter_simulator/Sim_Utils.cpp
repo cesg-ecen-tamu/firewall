@@ -27,6 +27,9 @@ void generate_test_file(std::ostream& out_file) {
 			count++;
 			ip_map.insert(std::pair<uint32_t, bool>(generated_src_ip, true));
 			ip_map.insert(std::pair<uint32_t, bool>(generated_dest_ip, true));
+
+			//can randomize ports too
+
 			rule_stream << "" << generated_src_ip << "\t" << 8080 << "\t"
 					<< generated_dest_ip << "\t" << 9080 << "accept\n";
 			ruleset_vector.push_back(rule_stream.str());
@@ -48,8 +51,11 @@ void simulate_filter(std::istream& in_file, std::ostream& out_file) {
 	int count = 0;
 	std::ostringstream rule_stream;
 	std::vector<std::string>::iterator it;
-	//BloomFilter<std::string> filter(max_training_ruleset_size,"x86_32");
-	BloomFilter<std::string> filter((long)max_training_ruleset_size,"x86_32"); //giving error
+
+	//ERROR SECTION
+	BloomFilter<std::string> filter((long)max_training_ruleset_size,"x86_32");
+	//ERROR SECTION
+
 	while (in_file.good()) {
 		getline(in_file, line);
 		//add_element into filter here
@@ -59,6 +65,9 @@ void simulate_filter(std::istream& in_file, std::ostream& out_file) {
 	while (count < max_test_ruleset_size) {
 		generated_src_ip = generate_random_ip();
 		generated_dest_ip = generate_random_ip();
+
+		//can randomize ports too
+
 		rule_stream << "" << generated_src_ip << "\t" << 8080 << "\t"
 				<< generated_dest_ip << "\t" << 9080 << "accept\n";
 		test_rules_vector.push_back(rule_stream.str());
