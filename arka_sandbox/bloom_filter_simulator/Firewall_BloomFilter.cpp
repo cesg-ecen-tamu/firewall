@@ -19,7 +19,7 @@ int main() {
 
 	generate_test_file(testfile_out);
 	simulate_filter(testfile_in,resultfile_out);
-	evaluate_result_file(resultfile_in,evalfile_out);
+	evaluate_result_file(testfile_in,resultfile_in,evalfile_out);
 
 	/*IGNORE --- TEST SECTION
 	 * std::ostringstream s_str;

@@ -53,12 +53,12 @@ void simulate_filter(std::istream& in_file, std::ostream& out_file) {
 	std::vector<std::string>::iterator it;
 
 	//ERROR SECTION
-	BloomFilter<std::string> filter((long)max_training_ruleset_size,"x86_32");
+	BloomFilter<std::string> filter((long) max_training_ruleset_size, "x86_32");
 	//ERROR SECTION
 
 	while (in_file.good()) {
 		getline(in_file, line);
-		//add_element into filter here
+		filter.add_element(line);
 	}
 
 	srand(time(NULL));
@@ -71,11 +71,65 @@ void simulate_filter(std::istream& in_file, std::ostream& out_file) {
 		rule_stream << "" << generated_src_ip << "\t" << 8080 << "\t"
 				<< generated_dest_ip << "\t" << 9080 << "accept\n";
 		test_rules_vector.push_back(rule_stream.str());
-					rule_stream.str("");
-		}
+		rule_stream.str("");
+	}
+	out_file << "Rule" << " " * 40 << "Match\n\n";
+	for (it = test_rules_vector.begin(); it < test_rules_vector.end(); it++) {
+		rule_stream << (*it);
+		if (filter.check_element(*it))
+			rule_stream << "\t" << 1 << "\n";
+		else
+			rule_stream << "\t" << 0 << "\n";
 
+		out_file << rule_stream.str();
+		rule_stream.str("");
+	}
+	((std::ofstream&) in_file).close();
+	((std::ofstream&) out_file).close();
+	test_rules_vector.clear();
+	filter.clear();
 }
-void evaluate_result_file(std::istream& in_file, std::ostream& out_file) {
+void evaluate_result_file(std::istream& ruleset_file, std::istream& in_file,
+		std::ostream& out_file) {
+	std::map<std::string, bool> ip_map;
+	std::string line;
+	std::ostringstream rule_stream;
+	std::string rule_string;
+	int result;
+	int count=0;
+	while (ruleset_file.good()) {
+		getline(ruleset_file, line);
+		ip_map.insert(std::pair<std::string, bool>(line, true));
+	}
+	out_file<<"Rule"<<" "*40<<"Match"<<"\t"<<"FPos\n\n";
+	while (in_file.good()) {
+
+		/* ignore the file header */
+		while(count<3){
+			count++;
+			getline(in_file, line);
+			continue;
+		}
+		/* ignore the file header */
+		getline(in_file, line);
+		rule_string = line.substr(0,line.find_last_of('\t'));
+		result = atoi((line.substr(line.find_last_of('\t'),1)).c_str());
+
+		if(ip_map[rule_string] && result)
+			rule_stream<<rule_string<<"\t"<<result<<"\t"<<MATCH<<"\n";
+		else if(!ip_map[rule_string] && result)
+			rule_stream<<rule_string<<"\t"<<result<<"\t"<<FALSE_POS<<"\n";
+		else if(ip_map[rule_string] && !result)
+			rule_stream<<rule_string<<"\t"<<result<<"\t"<<FALSE_NEG<<"\n";
+		else
+			rule_stream<<rule_string<<"\t"<<result<<"\t"<<MATCH<<"\n";
+
+		out_file<<rule_stream.str();
+		rule_stream.str("");
+	}
+	((std::ifstream&) ruleset_file).close();
+	((std::ifstream&) in_file).close();
+	((std::ofstream&) out_file).close();
 
 }
 
